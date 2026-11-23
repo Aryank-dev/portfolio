@@ -1,0 +1,557 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-snow: #eceff4;
+  --color-frost: #88c0d0;
+  --color-glacier: #81a1c1;
+  --color-mist: #b6c2d0;
+  --color-dim: #8996a7;
+  --color-ink: #171b22;
+  --color-deep: #11151b;
+  --color-panel: #232935;
+}
+
+:root {
+  color-scheme: dark;
+  /* Reference sky: shadcn dark background hsl(222.2 84% 4.9%) under a black wash */
+  --bg-main: #020817;
+  --bg-darker: #000000;
+  --frost: #88c0d0;
+  --glacier: #81a1c1;
+  --snow: #eceff4;
+  --muted: #a3aebc;
+  --hairline: rgba(236, 239, 244, 0.1);
+  --hairline-bright: rgba(136, 192, 208, 0.34);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-main);
+  scrollbar-color: rgba(136, 192, 208, 0.32) #020817;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: clip;
+  background-color: var(--bg-main);
+  color: var(--snow);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+}
+
+::selection {
+  background: rgba(136, 192, 208, 0.3);
+  color: #f7fafc;
+}
+
+:focus-visible {
+  outline: 2px solid var(--frost);
+  outline-offset: 4px;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font-family: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020817;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 3px solid #020817;
+  border-radius: 999px;
+  background: rgba(136, 192, 208, 0.4);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(136, 192, 208, 0.62);
+}
+
+.shell {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4.2vw, 3.5rem);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.display-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.text-gradient {
+  background: linear-gradient(103deg, #f2f7fa 4%, #b9dce5 38%, #88c0d0 68%, #7e9fbf 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.text-frost-glow {
+  filter: drop-shadow(0 0 28px rgba(136, 192, 208, 0.22));
+}
+
+/* Glass tuned for the deep-space sky: navy-black, so cards read as panes
+   floating in the starfield rather than slate slabs sitting on top of it. */
+.glass {
+  position: relative;
+  border: 1px solid rgba(236, 239, 244, 0.085);
+  background:
+    linear-gradient(145deg, rgba(28, 35, 50, 0.8) 0%, rgba(16, 21, 33, 0.86) 48%, rgba(8, 11, 19, 0.92) 100%);
+  box-shadow:
+    0 36px 90px -28px rgba(0, 0, 0, 0.85),
+    0 1px 0 0 rgba(255, 255, 255, 0.035) inset,
+    0 -1px 0 0 rgba(0, 0, 0, 0.3) inset;
+  -webkit-backdrop-filter: blur(22px) saturate(125%);
+  backdrop-filter: blur(22px) saturate(125%);
+}
+
+.glass::after {
+  position: absolute;
+  top: 0;
+  right: 9%;
+  left: 9%;
+  height: 1px;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(236, 239, 244, 0.26), transparent);
+}
+
+.glass-inset {
+  border: 1px solid rgba(236, 239, 244, 0.085);
+  background: linear-gradient(150deg, rgba(6, 9, 17, 0.82), rgba(2, 4, 10, 0.9));
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.025) inset,
+    0 14px 30px -22px rgba(0, 0, 0, 0.8);
+}
+
+.card-sheen {
+  position: absolute;
+  top: -14rem;
+  right: -12rem;
+  width: 27rem;
+  height: 27rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(136, 192, 208, 0.13), transparent 68%);
+  pointer-events: none;
+}
+
+.hover-border {
+  transition: border-color 0.45s var(--ease-out-expo), background-color 0.45s var(--ease-out-expo),
+    transform 0.45s var(--ease-out-expo), box-shadow 0.45s var(--ease-out-expo);
+}
+
+.hover-border:hover {
+  border-color: rgba(136, 192, 208, 0.3);
+}
+
+.rule {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, rgba(236, 239, 244, 0.13), rgba(236, 239, 244, 0.04) 72%, transparent);
+}
+
+.dot-grid {
+  background-image:
+    linear-gradient(rgba(236, 239, 244, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(236, 239, 244, 0.055) 1px, transparent 1px);
+  background-size: 42px 42px;
+  -webkit-mask-image: radial-gradient(ellipse 76% 70% at 52% 48%, black 5%, transparent 76%);
+  mask-image: radial-gradient(ellipse 76% 70% at 52% 48%, black 5%, transparent 76%);
+}
+
+/* The reference sky (nareshkhatri.dev): Tailwind
+   `bg-gradient-to-tl from-black via-zinc-600/20 to-black` over a #020817 base.
+   Black corners at top-left and bottom-right, a deep navy band (~#121725)
+   running from the bottom-left corner to the top-right corner. */
+.starfield-gradient {
+  background-color: #020817;
+  background-image: linear-gradient(
+    to top left,
+    #000000 0%,
+    rgba(82, 82, 91, 0.2) 50%,
+    #000000 100%
+  );
+}
+
+.scroll-line {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 48px;
+  overflow: hidden;
+  background: rgba(236, 239, 244, 0.13);
+}
+
+.scroll-line::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(180deg, transparent, var(--frost), transparent);
+  animation: scroll-cue 2.8s var(--ease-out-expo) infinite;
+}
+
+@keyframes scroll-cue {
+  0% {
+    transform: translateY(-100%);
+  }
+  60%,
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbit-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.28);
+  }
+}
+
+@keyframes drift-slow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -9px, 0);
+  }
+}
+
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes line-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.intro-rise {
+  animation: intro-rise 1s var(--ease-out-expo) both;
+}
+
+.orbit-slow {
+  animation: orbit 84s linear infinite;
+}
+
+.orbit-reverse {
+  animation: orbit-reverse 58s linear infinite;
+}
+
+.pulse-soft {
+  animation: pulse-soft 4.5s ease-in-out infinite;
+}
+
+.drift-slow {
+  animation: drift-slow 9s ease-in-out infinite;
+}
+
+/* ── SCROLL REVEAL ─────────────────────────────────────────────────────────
+   Used by <ScrollReveal> (src/components/ui/ScrollReveal.tsx).
+   The `is-visible` class is applied by React state, never by directly
+   mutating the DOM — this is what keeps stateful sections (the journal)
+   from losing their visibility when they re-render.
+   ✏️ EDIT: change 26px for a longer lift, or 0.9s for a faster fade. */
+.scroll-reveal {
+  opacity: 0;
+  transform: translate3d(0, 26px, 0);
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.modal-backdrop {
+  background: rgba(0, 3, 10, 0.78);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.project-art {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 70% 30%, rgba(136, 192, 208, 0.14), transparent 58%),
+    linear-gradient(148deg, #161c2a 0%, #0e131e 60%, #090d16 100%);
+}
+
+.project-art::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(180deg, transparent 58%, rgba(4, 7, 14, 0.5));
+  pointer-events: none;
+}
+
+.art-grid {
+  background-image:
+    linear-gradient(rgba(236, 239, 244, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(236, 239, 244, 0.07) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.project-card:hover .art-shift {
+  transform: translate3d(0, -6px, 0) scale(1.025);
+}
+
+.art-shift {
+  transition: transform 0.9s var(--ease-out-expo);
+}
+
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-underline::after {
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  content: "";
+  background: currentColor;
+  opacity: 0.28;
+  transform-origin: right;
+  transition: transform 0.45s var(--ease-out-expo), opacity 0.3s ease;
+}
+
+.link-underline:hover::after {
+  opacity: 0.7;
+  transform: scaleX(0.35);
+  transform-origin: left;
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .scroll-line {
+    height: 58px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CUSTOM CURSOR — inverted-color pointer
+   ──────────────────────────────────────────────────────────────────────────
+   `mix-blend-mode: difference` turns the white ring into the visual opposite
+   of whatever is underneath it: light text becomes dark, dark panels become
+   light. The browser's native cursor is hidden ONLY on precise pointers.
+   On phones/tablets and keyboard navigation, nothing changes.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.inverted-cursor-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: none;
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  transition: opacity 0.25s ease;
+}
+
+/* VISIBLE: show the custom cursor only on fine-pointer (mouse/trackpad) devices */
+@media (pointer: fine) {
+  html[data-custom-cursor="on"] .inverted-cursor-layer {
+    display: block;
+  }
+
+  html[data-custom-cursor="on"],
+  html[data-custom-cursor="on"] * {
+    cursor: none !important;
+  }
+
+  html[data-custom-cursor="on"] input,
+  html[data-custom-cursor="on"] textarea,
+  html[data-custom-cursor="on"] [contenteditable="true"] {
+    cursor: text !important;
+  }
+}
+
+.inverted-cursor-layer.is-visible {
+  opacity: 1;
+}
+
+.inverted-cursor-layer.is-hidden {
+  opacity: 0;
+}
+
+/* VISIBLE: the small solid dot in the middle of the ring */
+.inverted-cursor__dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: #ffffff;
+  will-change: transform;
+  transition: opacity 0.2s ease;
+}
+
+/* VISIBLE: the outer ring. ✏️ EDIT width/height/border for a different shape. */
+.inverted-cursor__ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: 9999px;
+  background: transparent;
+  will-change: transform;
+  transition:
+    width 0.28s var(--ease-out-expo),
+    height 0.28s var(--ease-out-expo),
+    background-color 0.28s ease,
+    border-color 0.28s ease;
+}
+
+/* VISIBLE: the word shown when hovering a project card (data-cursor-label). */
+.inverted-cursor__label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #000000;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  will-change: transform;
+  transition: opacity 0.15s ease;
+}
+
+/* Hovering any link/button → the ring grows and gains a translucent fill. */
+.inverted-cursor-layer.is-hovering .inverted-cursor__ring {
+  width: 54px;
+  height: 54px;
+  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Hovering a card with data-cursor-label → a solid disc with a dark label. */
+.inverted-cursor-layer.has-label .inverted-cursor__ring {
+  width: 78px;
+  height: 78px;
+  border-color: transparent;
+  background: #ffffff;
+}
+
+.inverted-cursor-layer.has-label .inverted-cursor__dot {
+  opacity: 0;
+}
+
+.inverted-cursor-layer.has-label .inverted-cursor__label {
+  opacity: 1;
+}
+
+.inverted-cursor-layer.is-pressed .inverted-cursor__ring {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.inverted-cursor-layer.is-pressed.has-label .inverted-cursor__ring {
+  background: rgba(255, 255, 255, 0.8);
+}
