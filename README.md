@@ -2,8 +2,9 @@
 
 Interactive developer portfolio showcasing AI/ML pipelines, quantitative modeling systems, and full-stack engineering.
 
+**Website Link:** https://portfolio-omega-lime-13.vercel.app/
 **Live Profile:** [github.com/Aryank-dev](https://github.com/Aryank-dev)  
-**Location:** Newton School of Technology (NST), Pune, India (18.52° N, 73.856° E)  
+**Location:** Newton School of Technology (NST), Pune, India 
 **Specialization:** 1st-Year B.Tech CSE (Artificial Intelligence & Machine Learning)
 
 ---
